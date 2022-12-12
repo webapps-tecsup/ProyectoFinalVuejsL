@@ -30,6 +30,16 @@
                         :items="artistas"
                         item-value="_id"
                         item-title="nombre"
+                        label="Artista"
+                        required
+                        :rules="[isRequired]"
+                    ></v-select>
+                    <v-select
+                        v-model="itemData.generoId"
+                        :items="generos"
+                        item-value="_id"
+                        item-title="nombre"
+                        label="Genero"
                         required
                         :rules="[isRequired]"
                     ></v-select>
@@ -142,6 +152,8 @@ const {
 } = useCrud("api/canciones");
 
 const { items: artistas } = useCrud("api/artistas");
+
+const { items: generos } = useCrud("api/generos");
 </script>
 
 <style lang="scss" scoped></style>

@@ -59,9 +59,7 @@
                                                     dark
                                                     block
                                                     tile
-                                                    @click="
-                                                        auth.iniciarSesion()
-                                                    "
+                                                    @click="login()"
                                                     >Iniciar Sesion</v-btn
                                                 >
                                                 <h6
@@ -231,13 +229,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useAuthStore } from "../stores/auth";
+import { useRouter } from "vue-router";
 const auth = useAuthStore();
+const router = useRouter();
 onMounted(() => {
-    auth.info();
     auth.sanctum();
 });
+async function login() {
+    await auth.iniciarSesion();
+    router.push("/");
+}
 </script>
 <style scoped>
 .register {

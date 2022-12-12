@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 const HomeComponent = () => import("../pages/home.vue");
 const LoginComponent = () => import("../pages/login.vue");
 const ArtistaComponent = () => import("../pages/artista.vue");
@@ -6,6 +7,8 @@ const MusicaComponent = () => import("../pages/musica.vue");
 const AlbumComponent = () => import("../pages/album.vue");
 const UsuarioComponent = () => import("../pages/usuario.vue");
 const AlbumDetComponent = () => import("../pages/albumDetalle.vue");
+const PlayListComponent = () => import("../pages/playList.vue");
+const PlayListDetComponent = () => import("../pages/playListDetalle.vue");
 
 // paginas del admin
 
@@ -33,6 +36,12 @@ const routes = [
     },
 
     { path: "/usuarios", name: "usuarios", component: UsuarioComponent },
+    { path: "/play-list", name: "playList", component: PlayListComponent },
+    {
+        path: "/play-list/:id",
+        name: "AlbumDet",
+        component: PlayListDetComponent,
+    },
 
     //Rutas del admin
     {
@@ -63,5 +72,12 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
+});
+router.beforeEach(async (to, from) => {
+    const auth = useAuthStore();
+    const isAuthenticated = await auth.info();
+    if (!isAuthenticated && to.name !== "login") {
+        return { name: "login" };
+    }
 });
 export default router;

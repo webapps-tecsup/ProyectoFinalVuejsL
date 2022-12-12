@@ -20,6 +20,7 @@ export const useCrud = (path: string, p = {}) => {
         await axios
             .get(`/${path}`, {
                 headers: { Authorization: "Bearer " + token.value },
+                params: params.value,
             })
             .then((x) => {
                 items.value = x.data;

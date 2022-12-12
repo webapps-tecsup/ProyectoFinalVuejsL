@@ -1,92 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" persistent location="center center">
-            <template v-slot:activator="{ props }">
-                <v-btn
-                    color="primary"
-                    variant="text"
-                    class="wi-mb-2"
-                    v-bind="props"
-                >
-                    Agregar Album
-                </v-btn>
-            </template>
-
-            <v-card max-width="600" flat location="bottom center">
-                <v-toolbar
-                    density="comfortable"
-                    :title="`${itemData.id ? 'Update' : 'Agregar'} Album`"
-                    color="primary"
-                    flat
-                ></v-toolbar>
-                <v-card-text class="pa-4 mb-2">
-                    <v-form v-model="valid" ref="form" lazy-validation>
-                        <v-text-field
-                            v-model="itemData.titulo"
-                            label="Titulo"
-                            required
-                            :rules="[isRequired]"
-                        ></v-text-field>
-                        <v-select
-                            v-model="itemData.artistaId"
-                            :items="artistas"
-                            item-value="_id"
-                            item-title="nombre"
-                            required
-                            :rules="[isRequired]"
-                            @update:model-value="getCanciones()"
-                        ></v-select>
-                        <v-select
-                            v-model="itemData.canciones"
-                            :items="canciones"
-                            multiple
-                            item-value="_id"
-                            item-title="titulo"
-                            required
-                            :rules="[isRequired]"
-                            return-object
-                        ></v-select>
-                        <v-file-input
-                            v-model="itemData.foto"
-                            :multiple="false"
-                            accept="image/*"
-                            required
-                            prepend-icon="mdi-camera"
-                            :rules="[isRequired]"
-                            label="Seleccione una imagen"
-                        ></v-file-input>
-
-                        <div class="d-flex justify-end" cols="12">
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                class="mr-2"
-                                color="secondary"
-                                variant="text"
-                                @click="
-                                    dialog = false;
-                                    reset();
-                                "
-                            >
-                                Cancelar
-                            </v-btn>
-                            <v-btn
-                                class="mr-4"
-                                :disabled="loading || !itemData.foto"
-                                color="primary"
-                                :loading="loading"
-                                variant="flat"
-                                @click="saveItemFormData()"
-                            >
-                                Crear
-                            </v-btn>
-                        </div>
-                    </v-form></v-card-text
-                >
-            </v-card>
-        </v-dialog>
-
         <p v-if="loading">Loading...</p>
-
         <v-row>
             <v-col v-for="album in items" :key="album._id">
                 <v-card :color="setColor()" theme="dark" variant="flat">
@@ -109,22 +23,10 @@
                                     class="ml-2"
                                     icon="mdi-play"
                                     variant="text"
-                                    :to="'/album/' + album._id"
+                                    :to="'/admin/albums/' + album._id"
                                 ></v-btn>
-                                <v-btn
-                                    color="error"
-                                    class="mr-4"
-                                    variant="text"
-                                    @click="deleteItem(album._id)"
-                                >
-                                    <v-icon
-                                        class="mr-1"
-                                        icon="mdi-delete"
-                                    ></v-icon>
-                                </v-btn>
                             </v-card-actions>
                         </div>
-
                         <v-avatar class="ma-3" size="125" rounded="0">
                             <v-img :src="'/storage/' + album.foto"></v-img>
                         </v-avatar>
@@ -145,12 +47,12 @@ const {
     loading,
     valid,
     token,
+    form,
+    dialog,
     reset,
     deleteItem,
     saveItemFormData,
     isRequired,
-    form,
-    dialog,
     setColor,
 } = useCrud("api/albums");
 const { items: artistas } = useCrud("api/artistas");

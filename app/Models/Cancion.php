@@ -20,9 +20,14 @@ class Cancion extends Model
     {
         return $this->hasMany(Album::class);
     }
-    public function Playlist()
+    public function reacciones()
     {
-        return $this->hasMany(Playlist::class);
+        return $this->hasMany(Reaccion::class);
     }
+    public function playlists()
+    {
+        return $this->belongsToMany(PlayList::class, null, "play_list_ids", "cancion_ids");
+    }
+
     protected $table = 'canciones';
 }

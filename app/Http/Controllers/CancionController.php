@@ -10,7 +10,12 @@ class CancionController extends Controller
 {
     public function index(Request $request)
     {
-        $canciones = Cancion::with('Artista')->get();
+        $canciones = [];
+        if ($request->search == NULL) {
+            $canciones = Cancion::with('Artista', 'Genero', 'reacciones')->get();
+        } else {
+            $canciones = Cancion::with('Artista', 'Genero', 'reacciones')->where('titulo', 'like', '%' . $request->search . '%')->get();
+        }
         return $canciones;
     }
     public function store(Request $request)
@@ -26,6 +31,7 @@ class CancionController extends Controller
             $cancion = new Cancion();
             $cancion->titulo = $request->titulo;
             $cancion->artista_id = $request->artistaId;
+            $cancion->genero_id = $request->generoId;
             $cancion->ruta_cancion = $fileName_musica;
             $cancion->foto = $fileName_foto;
             $cancion->save();

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Comentario extends Model
+class Reaccion extends Model
 {
     use HasFactory;
-    public function Foto()
+    public function cancion()
     {
-        return $this->belongsTo(Foto::class);
+        return $this->belongsTo(Cancion::class);
     }
-    public function User()
+    public function usuario()
     {
         return $this->belongsTo(User::class);
     }

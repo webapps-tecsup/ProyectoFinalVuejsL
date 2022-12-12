@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GeneroController;
+use App\Http\Controllers\PlayListController;
+use App\Http\Controllers\ReaccionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,12 +37,21 @@ Route::middleware('auth:sanctum')->get('/albums/{id}', [AlbumController::class, 
 Route::middleware('auth:sanctum')->resource('/generos', GeneroController::class)->only([
     'destroy', 'index', 'store', 'update',
 ]);
+Route::middleware('auth:sanctum')->resource('/reacciones', ReaccionController::class)->only([
+    'destroy', 'store'
+]);
+Route::middleware('auth:sanctum')->resource('/play-list', PlayListController::class)->only([
+    'destroy', 'index', 'store', 'update',
+]);
+Route::middleware('auth:sanctum')->get('/play-list/{id}', [PlayListController::class, 'show']);
 
 // Route::get('/album/{id}', [App\Http\Controllers\AlbumController::class, 'show'])->name('album');
 
 // Route::middleware('auth:sanctum')->post('/subir-musica', [App\Http\Controllers\AlbumController::class, 'subir'])->name('musica');
 
-Route::middleware('auth:sanctum')->get('/canciones_por_artista/{id}', [App\Http\Controllers\CancionController::class, 'cancionesPorArtista'])->name('cancionesPorArtista');
+Route::middleware('auth:sanctum')->get('/canciones_por_artista/{id}', [CancionController::class, 'cancionesPorArtista'])->name('cancionesPorArtista');
+Route::middleware('auth:sanctum')->post('/add_cancion_playlist', [PlayListController::class, 'addCancionAplayList'])->name('addCancionAplayList');
+Route::middleware('auth:sanctum')->post('/remove_cancion_playlist', [PlayListController::class, 'removeCancionAplayList'])->name('removeCancionAplayList');
 
 //Autentificacion
 Route::post('/user/register', [RegisterController::class, 'create'])->name('create');

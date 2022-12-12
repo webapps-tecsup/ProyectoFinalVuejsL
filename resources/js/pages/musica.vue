@@ -1,88 +1,12 @@
 <template>
-    <v-dialog v-model="dialog" persistent location="center center">
-        <template v-slot:activator="{ props }">
-            <v-btn
-                color="primary"
-                variant="text"
-                class="wi-mb-2"
-                v-bind="props"
-            >
-                Agregar Musica
-            </v-btn>
-        </template>
-        <v-card max-width="600" flat location="bottom center">
-            <v-toolbar
-                density="comfortable"
-                :title="`${itemData.id ? 'Update' : 'Agregar'} Musica`"
-                color="primary"
-                flat
-            ></v-toolbar>
-            <v-card-text class="pa-4 mb-2">
-                <v-form v-model="valid" ref="form" lazy-validation>
-                    <v-text-field
-                        v-model="itemData.titulo"
-                        label="Titulo"
-                        required
-                        :rules="[isRequired]"
-                    ></v-text-field>
-                    <v-select
-                        v-model="itemData.artistaId"
-                        :items="artistas"
-                        item-value="_id"
-                        item-title="nombre"
-                        required
-                        :rules="[isRequired]"
-                    ></v-select>
-                    <v-file-input
-                        v-model="itemData.musica"
-                        :multiple="false"
-                        accept="audio/*"
-                        label="Seleccione una musica"
-                        required
-                        :rules="[isRequired]"
-                    ></v-file-input>
-                    <v-file-input
-                        v-model="itemData.foto"
-                        :multiple="false"
-                        accept="image/*"
-                        prepend-icon="mdi-camera"
-                        label="Seleccione una imagen"
-                        required
-                        :rules="[isRequired]"
-                    ></v-file-input>
-
-                    <div class="d-flex justify-end">
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            class="mr-2"
-                            color="secondary"
-                            variant="text"
-                            @click="
-                                dialog = false;
-                                reset();
-                            "
-                        >
-                            Cancelar
-                        </v-btn>
-                        <v-btn
-                            class="mr-4"
-                            :disabled="
-                                loading || !itemData.foto || !itemData.musica
-                            "
-                            color="primary"
-                            :loading="loading"
-                            variant="flat"
-                            @click="saveItemFormData()"
-                        >
-                            Crear
-                        </v-btn>
-                    </div>
-                </v-form>
-            </v-card-text>
-        </v-card>
-    </v-dialog>
-
     <v-row>
+        <v-col cols="12">
+            <v-text-field
+                v-model="params.search"
+                @update:model-value="getItems()"
+            >
+            </v-text-field>
+        </v-col>
         <v-col v-for="cancion in items" :key="cancion._id">
             <v-card :color="setColor()" theme="dark" variant="flat">
                 <div class="d-flex flex-no-wrap justify-space-between">
@@ -102,14 +26,48 @@
                                 variant="text"
                                 @click="music.cancionActual = cancion"
                             ></v-btn>
+                            <v-menu>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        icon="mdi-playlist-plus"
+                                        v-bind="props"
+                                    ></v-btn>
+                                </template>
+
+                                <v-list>
+                                    <v-list-item
+                                        v-for="(item, i) in playList"
+                                        :key="item._id"
+                                        @click="
+                                            agregarAplayList(
+                                                cancion._id,
+                                                item._id
+                                            )
+                                        "
+                                    >
+                                        <v-list-item-title>{{
+                                            item.titulo
+                                        }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+
                             <v-btn
-                                color="error"
-                                class="mr-4"
+                                class="ml-2"
+                                :icon="
+                                    checkReaccion(cancion.reacciones)
+                                        ? 'mdi-heart'
+                                        : 'mdi-heart-outline'
+                                "
                                 variant="text"
-                                @click="deleteItem(cancion._id)"
+                                @click="
+                                    checkReaccion(cancion.reacciones)
+                                        ? removeReaccion(cancion._id)
+                                        : agregarReaccion(cancion._id)
+                                "
                             >
-                                <v-icon class="mr-1" icon="mdi-delete"></v-icon>
                             </v-btn>
+                            <small>{{ cancion.reacciones.length }}</small>
                         </v-card-actions>
                     </div>
 
@@ -124,24 +82,58 @@
 
 <script setup lang="ts">
 import { useMusicStore } from "../stores/music";
+import { useAuthStore } from "../stores/auth";
 import { useCrud } from "../composables/crud";
+import axios from "axios";
 
 const music = useMusicStore();
-const {
-    items,
-    itemData,
-    deleteItem,
-    reset,
-    saveItemFormData,
-    valid,
-    isRequired,
-    form,
-    loading,
-    dialog,
-    setColor,
-} = useCrud("api/canciones");
+const auth = useAuthStore();
 
-const { items: artistas } = useCrud("api/artistas");
+const { items, setColor, getItems, params } = useCrud("api/canciones");
+
+const { items: playList, token } = useCrud("api/play-list");
+
+async function agregarAplayList(idCancion: string, idPlayList: string) {
+    await axios
+        .post(
+            `/api/add_cancion_playlist`,
+            { cancion_id: idCancion, playlist_id: idPlayList },
+            {
+                headers: { Authorization: "Bearer " + token.value },
+            }
+        )
+        .then((x) => {})
+        .catch(() => {});
+}
+async function agregarReaccion(idCancion: string) {
+    await axios
+        .post(
+            `/api/reacciones`,
+            { cancion_id: idCancion },
+            {
+                headers: { Authorization: "Bearer " + token.value },
+            }
+        )
+        .then((x) => {
+            getItems();
+        })
+        .catch(() => {});
+}
+async function removeReaccion(idCancion: string) {
+    await axios
+        .delete(`/api/reacciones/${idCancion}`, {
+            headers: { Authorization: "Bearer " + token.value },
+        })
+        .then((x) => {
+            getItems();
+        })
+        .catch(() => {});
+}
+function checkReaccion(reacciones: any[]) {
+    const reaccion = reacciones.find((r) => r.user_id === auth.user._id);
+
+    return reaccion !== undefined;
+}
 </script>
 
 <style lang="scss" scoped></style>

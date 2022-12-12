@@ -12,12 +12,14 @@ interface Auth {
 export const useAuthStore = defineStore("auth", () => {
     const step = ref<number>(1);
     const auth = ref<Auth>({});
+    const user = ref<any>({});
 
     const emailRules = [
         (v) => !!v || "E-mail is requerido",
         (v) => /.+@.+\..+/.test(v) || "E-mail debe ser valido",
     ];
     const token = useLocalStorage("token", "");
+
     async function iniciarSesion() {
         await axios
             .post("/api/user/login", auth.value)
@@ -34,28 +36,35 @@ export const useAuthStore = defineStore("auth", () => {
             })
             .catch(() => {});
     }
+    function salir() {
+        token.value = "";
+    }
 
     async function info() {
-        await axios
+        return await axios
             .get("/api/user/info", {
                 headers: { Authorization: "Bearer " + token.value },
             })
             .then((x) => {
-                console.log(x.data);
+                user.value = x.data;
+                return true;
             })
-            .catch(() => {});
+            .catch(() => {
+                return false;
+            });
     }
     async function sanctum() {
         await axios
             .get("/sanctum/csrf-cookie")
-            .then((x) => {
-                console.log(x.data);
-            })
+            .then((x) => {})
             .catch(() => {});
     }
+
     return {
         auth,
         step,
+        user,
+        salir,
         iniciarSesion,
         info,
         sanctum,
