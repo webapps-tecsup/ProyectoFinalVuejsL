@@ -1,98 +1,140 @@
 <template>
-    <div>
-        <v-row>
-            <v-col
-                cols="12"
-                sm="6"
-                md="3"
-                xl="3"
-                v-for="(item, index) in artistas"
-                :key="index"
+    <v-row>
+        <v-col cols="12">
+            <v-text-field
+                label="Buscar Musica"
+                v-model="params.search"
+                @update:model-value="getItems()"
             >
-                <v-card>
-                    <v-img cover height="250" :src="item.image"></v-img>
+            </v-text-field>
+        </v-col>
+        <v-col v-for="cancion in items" :key="cancion._id">
+            <v-card :color="setColor()" theme="dark" variant="flat">
+                <div class="d-flex flex-no-wrap justify-space-between">
+                    <div>
+                        <v-card-title class="text-h5">
+                            {{ cancion.titulo }}
+                        </v-card-title>
 
-                    <v-card-item>
-                        <v-card-title>{{ item.name }}</v-card-title>
+                        <v-card-subtitle>{{
+                            cancion.artista?.nombre
+                        }}</v-card-subtitle>
 
-                        <v-card-subtitle>
-                            <span class="mr-1">Local Favorite</span>
+                        <v-card-actions>
+                            <v-btn
+                                class="ml-2"
+                                icon="mdi-play"
+                                variant="text"
+                                @click="music.cancionActual = cancion"
+                            ></v-btn>
+                            <v-menu>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        icon="mdi-playlist-plus"
+                                        v-bind="props"
+                                    ></v-btn>
+                                </template>
 
-                            <v-icon
-                                color="error"
-                                icon="mdi-fire-circle"
-                                size="small"
-                            ></v-icon>
-                        </v-card-subtitle>
-                    </v-card-item>
+                                <v-list>
+                                    <v-list-item
+                                        v-for="(item, i) in playList"
+                                        :key="item._id"
+                                        @click="
+                                            agregarAplayList(
+                                                cancion._id,
+                                                item._id
+                                            )
+                                        "
+                                    >
+                                        <v-list-item-title>{{
+                                            item.titulo
+                                        }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
 
-                    <v-card-text>
-                        <v-row aling="center" class="mx-0">
-                            <v-rating
-                                :model-value="4.5"
-                                color="amber"
-                                density="compact"
-                                half-increments
-                                readonly
-                                size="small"
+                            <v-btn
+                                class="ml-2"
+                                :icon="
+                                    checkReaccion(cancion.reacciones)
+                                        ? 'mdi-heart'
+                                        : 'mdi-heart-outline'
+                                "
+                                variant="text"
+                                @click="
+                                    checkReaccion(cancion.reacciones)
+                                        ? removeReaccion(cancion._id)
+                                        : agregarReaccion(cancion._id)
+                                "
                             >
-                            </v-rating>
+                            </v-btn>
+                            <small>{{ cancion.reacciones.length }}</small>
+                        </v-card-actions>
+                    </div>
 
-                            <div class="text-grey ms-4">4.5 (413)</div>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </div>
+                    <v-avatar class="ma-3" size="125" rounded="0">
+                        <v-img :src="'/storage/' + cancion.foto"></v-img>
+                    </v-avatar>
+                </div>
+            </v-card>
+        </v-col>
+    </v-row>
 </template>
-<script>
-export default {
-    data: () => ({
-        loading: false,
-        selection: 1,
-        artistas: [
-            {
-                name: "Olivia Rodrigo",
-                image: "https://i.pinimg.com/564x/8a/38/ad/8a38ad716d3f9ba83c29481871a6c7a7.jpg",
-            },
-            {
-                name: "Billie Eilish",
-                image: "https://i.pinimg.com/564x/ed/04/ba/ed04bad2a89aeb6d3ad254b7f5ece1e3.jpg",
-            },
-            {
-                name: "The Weeknd",
-                image: "https://i.pinimg.com/564x/7e/f5/79/7ef579549eeee0d7b668f922dc2d1758.jpg",
-            },
-            {
-                name: "Harry Styles",
-                image: "https://i.pinimg.com/564x/c7/21/91/c721919f9e3e447ae92f540cec01f7a5.jpg",
-            },
-            {
-                name: "Lil Peep",
-                image: "https://i.pinimg.com/474x/cc/b5/4d/ccb54d16148b867e1356a9f22431a61c.jpg",
-            },
-            {
-                name: "Sebastian Yatra",
-                image: "https://i.pinimg.com/474x/97/c4/53/97c4539022263608b3a621a98a16a3d3.jpg",
-            },
-            {
-                name: "Shawn Mendes",
-                image: "https://i.pinimg.com/474x/56/d4/c4/56d4c42647a44ff8c788141b6181d13e.jpg",
-            },
-            {
-                name: "Bruno Mars",
-                image: "https://i.pinimg.com/474x/b6/6c/ff/b66cff3a4a342fe09acba76f97269a48.jpg",
-            },
-        ],
-    }),
 
-    methods: {
-        reserve() {
-            this.loading = true;
+<script setup lang="ts">
+import { useMusicStore } from "../stores/music";
+import { useAuthStore } from "../stores/auth";
+import { useCrud } from "../composables/crud";
+import axios from "axios";
 
-            setTimeout(() => (this.loading = false), 2000);
-        },
-    },
-};
+const music = useMusicStore();
+const auth = useAuthStore();
+
+const { items, setColor, getItems, params } = useCrud("api/canciones");
+
+const { items: playList, token } = useCrud("api/play-list");
+
+async function agregarAplayList(idCancion: string, idPlayList: string) {
+    await axios
+        .post(
+            `/api/add_cancion_playlist`,
+            { cancion_id: idCancion, playlist_id: idPlayList },
+            {
+                headers: { Authorization: "Bearer " + token.value },
+            }
+        )
+        .then((x) => {})
+        .catch(() => {});
+}
+async function agregarReaccion(idCancion: string) {
+    await axios
+        .post(
+            `/api/reacciones`,
+            { cancion_id: idCancion },
+            {
+                headers: { Authorization: "Bearer " + token.value },
+            }
+        )
+        .then((x) => {
+            getItems();
+        })
+        .catch(() => {});
+}
+async function removeReaccion(idCancion: string) {
+    await axios
+        .delete(`/api/reacciones/${idCancion}`, {
+            headers: { Authorization: "Bearer " + token.value },
+        })
+        .then((x) => {
+            getItems();
+        })
+        .catch(() => {});
+}
+function checkReaccion(reacciones: any[]) {
+    const reaccion = reacciones.find((r) => r.user_id === auth.user._id);
+
+    return reaccion !== undefined;
+}
 </script>
+
+<style lang="scss" scoped></style>

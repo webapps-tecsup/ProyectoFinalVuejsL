@@ -40,11 +40,7 @@ const items = [
         icon: "mdi-music",
         ruta: "/admin/generos",
     },
-    {
-        nombre: "PlayList",
-        icon: "mdi-music",
-        ruta: "/play-list",
-    },
+
     {
         nombre: "Mi musica",
         icon: "mdi-music",
@@ -62,7 +58,7 @@ const items1 = [
     { nombre: "Inicio", icon: "mdi-home", ruta: "/" },
 
     {
-        nombre: "PlayList",
+        nombre: "Playlist",
         icon: "mdi-music",
         ruta: "/play-list",
     },

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cancion;
+use App\Models\Reaccion;
 use Illuminate\Support\Facades\Storage;
 
 class CancionController extends Controller
@@ -16,6 +17,12 @@ class CancionController extends Controller
         } else {
             $canciones = Cancion::with('Artista', 'Genero', 'reacciones')->where('titulo', 'like', '%' . $request->search . '%')->get();
         }
+        return $canciones;
+    }
+    public function miMusica(Request $request)
+    {
+        $canciones = Reaccion::where('user_id', $request->user()->_id)->with('cancion', 'cancion.reacciones', 'cancion.artista')->get();
+
         return $canciones;
     }
     public function store(Request $request)

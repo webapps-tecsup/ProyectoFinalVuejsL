@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->get('/play-list/{id}', [PlayListController::c
 Route::middleware('auth:sanctum')->get('/canciones_por_artista/{id}', [CancionController::class, 'cancionesPorArtista'])->name('cancionesPorArtista');
 Route::middleware('auth:sanctum')->post('/add_cancion_playlist', [PlayListController::class, 'addCancionAplayList'])->name('addCancionAplayList');
 Route::middleware('auth:sanctum')->post('/remove_cancion_playlist', [PlayListController::class, 'removeCancionAplayList'])->name('removeCancionAplayList');
+Route::middleware('auth:sanctum')->get('/mis-canciones', [CancionController::class, 'miMusica'])->name('miMusica');
 
 //Autentificacion
 Route::post('/user/register', [RegisterController::class, 'create'])->name('create');

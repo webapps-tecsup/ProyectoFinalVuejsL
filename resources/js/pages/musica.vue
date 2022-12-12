@@ -1,22 +1,15 @@
 <template>
     <v-row>
-        <v-col cols="12">
-            <v-text-field
-                v-model="params.search"
-                @update:model-value="getItems()"
-            >
-            </v-text-field>
-        </v-col>
         <v-col v-for="cancion in items" :key="cancion._id">
             <v-card :color="setColor()" theme="dark" variant="flat">
                 <div class="d-flex flex-no-wrap justify-space-between">
                     <div>
                         <v-card-title class="text-h5">
-                            {{ cancion.titulo }}
+                            {{ cancion.cancion.titulo }}
                         </v-card-title>
 
                         <v-card-subtitle>{{
-                            cancion.artista?.nombre
+                            cancion.cancion.artista?.nombre
                         }}</v-card-subtitle>
 
                         <v-card-actions>
@@ -24,7 +17,7 @@
                                 class="ml-2"
                                 icon="mdi-play"
                                 variant="text"
-                                @click="music.cancionActual = cancion"
+                                @click="music.cancionActual = cancion.cancion"
                             ></v-btn>
                             <v-menu>
                                 <template v-slot:activator="{ props }">
@@ -54,25 +47,21 @@
 
                             <v-btn
                                 class="ml-2"
-                                :icon="
-                                    checkReaccion(cancion.reacciones)
-                                        ? 'mdi-heart'
-                                        : 'mdi-heart-outline'
-                                "
+                                icon="mdi-heart"
                                 variant="text"
-                                @click="
-                                    checkReaccion(cancion.reacciones)
-                                        ? removeReaccion(cancion._id)
-                                        : agregarReaccion(cancion._id)
-                                "
+                                @click="removeReaccion(cancion.cancion._id)"
                             >
                             </v-btn>
-                            <small>{{ cancion.reacciones.length }}</small>
+                            <small>{{
+                                cancion.cancion?.reacciones?.length
+                            }}</small>
                         </v-card-actions>
                     </div>
 
                     <v-avatar class="ma-3" size="125" rounded="0">
-                        <v-img :src="'/storage/' + cancion.foto"></v-img>
+                        <v-img
+                            :src="'/storage/' + cancion.cancion.foto"
+                        ></v-img>
                     </v-avatar>
                 </div>
             </v-card>
@@ -89,7 +78,7 @@ import axios from "axios";
 const music = useMusicStore();
 const auth = useAuthStore();
 
-const { items, setColor, getItems, params } = useCrud("api/canciones");
+const { items, setColor, getItems, params } = useCrud("api/mis-canciones");
 
 const { items: playList, token } = useCrud("api/play-list");
 

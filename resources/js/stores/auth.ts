@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 import { useLocalStorage } from "@vueuse/core";
-
+import { useMusicStore } from "../stores/music";
 interface Auth {
     name?: string;
     email?: string;
@@ -10,6 +10,7 @@ interface Auth {
 }
 
 export const useAuthStore = defineStore("auth", () => {
+    const music = useMusicStore();
     const step = ref<number>(1);
     const auth = ref<Auth>({});
     const user = ref<any>({});
@@ -38,6 +39,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
     function salir() {
         token.value = "";
+        music.cancionActual = {};
     }
 
     async function info() {
