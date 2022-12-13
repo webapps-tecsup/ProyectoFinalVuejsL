@@ -62,32 +62,6 @@
                                                     @click="login()"
                                                     >Iniciar Sesion</v-btn
                                                 >
-                                                <h6
-                                                    class="text-center grey--text mt-4 mb-3"
-                                                >
-                                                    Iniciar sesión con
-                                                </h6>
-                                                <div
-                                                    class="d-flex justify-space-between align-center mx-10 mb-16"
-                                                >
-                                                    <v-btn color="white">
-                                                        <v-icon color="red"
-                                                            >mdi-google</v-icon
-                                                        >
-                                                    </v-btn>
-                                                    <v-btn color="white">
-                                                        <v-icon
-                                                            color="blue lighten-3"
-                                                            >mdi-facebook</v-icon
-                                                        >
-                                                    </v-btn>
-                                                    <v-btn color="white">
-                                                        <v-icon
-                                                            color="light-blue lighten-3"
-                                                            >mdi-twitter</v-icon
-                                                        >
-                                                    </v-btn>
-                                                </div>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
@@ -189,32 +163,6 @@
                                                     @click="auth.registrar()"
                                                     >Registrarse</v-btn
                                                 >
-
-                                                <h6
-                                                    class="text-center grey--text mt-4 mb-3"
-                                                >
-                                                    Registrarse con
-                                                </h6>
-                                                <div
-                                                    class="d-flex justify-space-between align-center mx-10 mb-11"
-                                                >
-                                                    <v-btn color="white">
-                                                        <v-icon color="red"
-                                                            >mdi-google</v-icon
-                                                        >
-                                                    </v-btn>
-                                                    <v-btn color="white">
-                                                        <v-icon color="blue"
-                                                            >mdi-facebook</v-icon
-                                                        >
-                                                    </v-btn>
-                                                    <v-btn color="white">
-                                                        <v-icon
-                                                            color="light-blue lighten-3"
-                                                            >mdi-twitter</v-icon
-                                                        >
-                                                    </v-btn>
-                                                </div>
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
