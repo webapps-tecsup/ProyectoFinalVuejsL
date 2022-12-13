@@ -239,7 +239,7 @@ onMounted(() => {
 });
 async function login() {
     await auth.iniciarSesion();
-    router.push("/");
+    router.push("/musicas");
 }
 </script>
 <style scoped>

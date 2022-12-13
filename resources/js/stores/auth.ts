@@ -42,6 +42,7 @@ export const useAuthStore = defineStore("auth", () => {
     function salir() {
         token.value = "";
         music.cancionActual = {};
+        user.value = {};
     }
 
     async function info() {

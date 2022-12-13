@@ -5,25 +5,24 @@ const LoginComponent = () => import("../pages/login.vue");
 const ArtistaComponent = () => import("../pages/artista.vue");
 const MusicaComponent = () => import("../pages/musica.vue");
 const AlbumComponent = () => import("../pages/album.vue");
-const UsuarioComponent = () => import("../pages/usuario.vue");
 const AlbumDetComponent = () => import("../pages/albumDetalle.vue");
 const PlayListComponent = () => import("../pages/playList.vue");
 const PlayListDetComponent = () => import("../pages/playListDetalle.vue");
-
+const WelcomeComponent = () => import("../pages/welcome.vue");
 // paginas del admin
 
 const AdminArtistaComponent = () => import("../pages/admin/artista.vue");
 const AdminMusicaComponent = () => import("../pages/admin/musica.vue");
-const AdminUsuarioComponent = () => import("../pages/admin/usuario.vue");
 const AdminAlbumComponent = () => import("../pages/admin/album.vue");
 const AdminAlbumDetComponent = () => import("../pages/admin/albumDetalle.vue");
 const AdminGeneroComponent = () => import("../pages/admin/generos.vue");
 
 const routes = [
-    { path: "/", name: "home", component: HomeComponent },
+    { path: "/", name: "welcome", component: WelcomeComponent },
+    { path: "/musicas", name: "home", component: HomeComponent },
     { path: "/login", name: "login", component: LoginComponent },
     { path: "/artistas", name: "artistas", component: ArtistaComponent },
-    { path: "/musicas", name: "musicas", component: MusicaComponent },
+    { path: "/mis-musicas", name: "musicas", component: MusicaComponent },
     {
         path: "/albums",
         name: "albums",
@@ -35,7 +34,6 @@ const routes = [
         component: AlbumDetComponent,
     },
 
-    { path: "/usuarios", name: "usuarios", component: UsuarioComponent },
     { path: "/play-list", name: "playList", component: PlayListComponent },
     {
         path: "/play-list/:id",
@@ -52,11 +50,6 @@ const routes = [
     { path: "/admin/musicas", name: "musica", component: AdminMusicaComponent },
     { path: "/admin/generos", name: "genero", component: AdminGeneroComponent },
 
-    {
-        path: "/admin/usuarios",
-        name: "admin-usuarios",
-        component: AdminUsuarioComponent,
-    },
     {
         path: "/admin/albums",
         name: "admin-albums",
@@ -76,7 +69,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     const auth = useAuthStore();
     const isAuthenticated = await auth.info();
-    if (!isAuthenticated && to.name !== "login") {
+    if (!isAuthenticated && to.name !== "login" && to.name != "welcome") {
         return { name: "login" };
     }
 });

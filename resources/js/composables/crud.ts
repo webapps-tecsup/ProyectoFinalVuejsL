@@ -22,6 +22,19 @@ export const useCrud = (path: string, p = {}) => {
         "#f48fb1",
         "#9c64a6",
         "#4dd0e1",
+        "#ef5350",
+        "#f06292",
+        "#ba68c8",
+        "#9575cd",
+        "#7986cb",
+        "#4db6ac",
+        "#81c784",
+        "#aed581",
+        "#dce775",
+        "#fff176",
+        "#ffd54f",
+        "#ff8a65",
+        "#a1887f",
     ];
     async function getItems() {
         await axios

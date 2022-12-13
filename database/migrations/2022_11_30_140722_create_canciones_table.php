@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('canciones', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('duracion');
             $table->unsignedBigInteger('id_artista');
             $table->foreign('id_artista')->references('id')->on('artistas');
             $table->unsignedBigInteger('id_album');

@@ -1,20 +1,20 @@
 <template>
     <div>
-        <v-app-bar color="primary" flat>
+        <v-app-bar color="black" theme="dark" flat>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer">
             </v-app-bar-nav-icon>
             <v-spacer></v-spacer>
             <v-icon icon="mdi-account"></v-icon>
             <small class="mr-16">{{ auth.user.name }}</small>
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer">
+        <v-navigation-drawer v-model="drawer" color="black">
             <v-list>
                 <v-list-item
                     v-for="item in auth.user.admin ? items : items1"
                     :to="item.ruta"
                 >
                     <template v-slot:prepend>
-                        <v-icon :icon="item.icon" color="primary"></v-icon>
+                        <v-icon :icon="item.icon" color="white"></v-icon>
                     </template>
                     {{ item.nombre }}
                 </v-list-item>
@@ -37,7 +37,7 @@ const auth = useAuthStore();
 const router = useRouter();
 
 const items = [
-    { nombre: "Inicio", icon: "mdi-home", ruta: "/" },
+    { nombre: "Inicio", icon: "mdi-home", ruta: "/musicas" },
     {
         nombre: "Generos",
         icon: "mdi-music",
@@ -45,7 +45,7 @@ const items = [
     },
 
     {
-        nombre: "Mi musica",
+        nombre: "Musicas",
         icon: "mdi-music",
         ruta: "/admin/musicas",
     },
@@ -58,7 +58,7 @@ const items = [
 ];
 //Para el Publico
 const items1 = [
-    { nombre: "Inicio", icon: "mdi-home", ruta: "/" },
+    { nombre: "Inicio", icon: "mdi-home", ruta: "/musicas" },
 
     {
         nombre: "Playlist",
@@ -68,7 +68,7 @@ const items1 = [
     {
         nombre: "Mi musica",
         icon: "mdi-music",
-        ruta: "/musicas",
+        ruta: "/mis-musicas",
     },
     {
         nombre: "Artistas",
@@ -80,6 +80,6 @@ const items1 = [
 const drawer = ref<boolean>(false);
 function salir() {
     auth.salir();
-    router.push("/login");
+    router.push("/");
 }
 </script>

@@ -1,7 +1,8 @@
 <template>
     <v-app class="app">
-        <Navbar v-if="$route.path != '/login'"></Navbar>
-        <v-main>
+        <Navbar v-if="$route.path != '/login' && $route.path != '/'"></Navbar>
+        <v-main v-if="$route.path === '/'"> <router-view></router-view></v-main>
+        <v-main v-else>
             <v-container>
                 <router-view></router-view>
             </v-container>
