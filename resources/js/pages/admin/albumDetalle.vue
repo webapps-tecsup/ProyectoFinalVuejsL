@@ -1,21 +1,43 @@
 <template>
     <div>
         <v-card variant="tonal">
-            <v-img
-                :src="'/storage/' + album.foto"
-                class="align-end"
-                gradient="to bottom, rgba(0,0,4,.5), rgba(107,7,172,.5)"
-                height="400px"
-            >
-                <v-card-title
-                    class="text-white"
-                    v-text="album.titulo"
-                ></v-card-title>
-                <v-card-subtitle
-                    class="text-white"
-                    v-text="album.artista?.nombre"
-                ></v-card-subtitle>
-            </v-img>
+            <v-row class="bg-black">
+                <v-col cols="7">
+                    <v-img
+                        :src="'/storage/' + album.foto"
+                        class="align-end"
+                        gradient="to bottom, rgba(0,0,4,.5), rgba(107,7,172,.5)"
+                        height="400px"
+                    >
+                    </v-img>
+                </v-col>
+                <v-col cols="5" class="text">
+                    <div>
+                        <v-card-title
+                            class="text-h3 text-white text-center m-5"
+                            v-text="album.titulo"
+                        ></v-card-title>
+                        <div class="d-flex text-white text-s justify-center">
+                            <v-avatar size="x-small" class="">
+                                <v-img
+                                    cover
+                                    height="250"
+                                    :src="'/storage/' + album.artista?.foto"
+                                >
+                                </v-img>
+                            </v-avatar>
+                            <v-card-subtitle
+                                v-text="album.artista?.nombre"
+                            ></v-card-subtitle>
+                            <v-card-subtitle>
+                                <v-icon icon="mdi-music-box-multiple"></v-icon>
+                                {{ album.canciones?.length }}
+                                canciones</v-card-subtitle
+                            >
+                        </div>
+                    </div>
+                </v-col>
+            </v-row>
         </v-card>
 
         <v-col cols="8">
@@ -28,7 +50,7 @@
                 >
                     <!-- :subtitle="cancion.subtitle" -->
                     <template v-slot:prepend>
-                        <v-avatar color="grey">
+                        <v-avatar color="grey" rounded="2">
                             <v-img
                                 cover
                                 height="250"
@@ -77,4 +99,11 @@ async function getCanciones() {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.text {
+    padding-top: 130px;
+}
+.text-s {
+    padding-top: 90px;
+}
+</style>

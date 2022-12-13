@@ -15,7 +15,9 @@
             <v-card max-width="600" flat location="bottom center">
                 <v-toolbar
                     density="comfortable"
-                    :title="`${itemData.id ? 'Update' : 'Agregar'} PlayList`"
+                    :title="`${
+                        itemData.id ? 'Actualizar' : 'Agregar'
+                    } Playlist`"
                     color="primary"
                     flat
                 ></v-toolbar>

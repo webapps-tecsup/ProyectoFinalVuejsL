@@ -15,7 +15,6 @@
                         <v-card-title class="text-h5">
                             {{ cancion.titulo }}
                         </v-card-title>
-
                         <v-card-subtitle>{{
                             cancion.artista?.nombre
                         }}</v-card-subtitle>
@@ -86,6 +85,7 @@ import { useMusicStore } from "../stores/music";
 import { useAuthStore } from "../stores/auth";
 import { useCrud } from "../composables/crud";
 import axios from "axios";
+import { userInfo } from "os";
 
 const music = useMusicStore();
 const auth = useAuthStore();

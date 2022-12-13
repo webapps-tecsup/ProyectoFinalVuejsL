@@ -1,17 +1,26 @@
 <template>
     <div>
         <v-card variant="tonal">
-            <v-img
-                :src="'/storage/' + playList.foto"
-                class="align-end"
-                gradient="to bottom, rgba(0,0,4,.5), rgba(107,7,172,.5)"
-                height="400px"
-            >
-                <v-card-title
-                    class="text-white"
-                    v-text="playList.titulo"
-                ></v-card-title>
-            </v-img>
+            <v-row class="bg-black">
+                <v-col cols="5">
+                    <v-card-title class="text-white text-subtitle-2">
+                        PLAYLIST
+                    </v-card-title>
+                    <v-card-title
+                        class="title text-white text-center"
+                        v-text="playList.titulo"
+                    ></v-card-title>
+                </v-col>
+                <v-col cols="7">
+                    <v-img
+                        :src="'/storage/' + playList.foto"
+                        class="align-end"
+                        gradient="to bottom, rgba(0,0,4,.5), rgba(30,127,181,.5)"
+                        height="400px"
+                    >
+                    </v-img>
+                </v-col>
+            </v-row>
         </v-card>
         <v-col cols="8">
             <v-list lines="two">
@@ -21,9 +30,8 @@
                     :key="cancion._id"
                     :title="cancion.titulo"
                 >
-                    <!-- :subtitle="cancion.subtitle" -->
                     <template v-slot:prepend>
-                        <v-avatar color="grey">
+                        <v-avatar rounded="2" color="grey">
                             <v-img
                                 cover
                                 height="250"
@@ -103,4 +111,10 @@ async function eliminarCancionDePlayList(
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.title {
+    padding-top: 140px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 40px;
+}
+</style>

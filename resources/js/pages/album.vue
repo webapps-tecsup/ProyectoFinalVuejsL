@@ -23,7 +23,7 @@
                                     class="ml-2"
                                     icon="mdi-play"
                                     variant="text"
-                                    :to="'/admin/albums/' + album._id"
+                                    :to="'/albums/' + album._id"
                                 ></v-btn>
                             </v-card-actions>
                         </div>

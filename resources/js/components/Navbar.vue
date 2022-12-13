@@ -3,6 +3,9 @@
         <v-app-bar color="primary" flat>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer">
             </v-app-bar-nav-icon>
+            <v-spacer></v-spacer>
+            <v-icon icon="mdi-account"></v-icon>
+            <small class="mr-16">{{ auth.user.name }}</small>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer">
             <v-list>
