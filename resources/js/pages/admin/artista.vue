@@ -76,13 +76,6 @@
                                 {{ artista.nombre }}
                             </v-card-title>
                             <v-card-actions>
-                                <!-- <v-btn
-                                    class="ml-2"
-                                    icon="mdi-play"
-                                    variant="text"
-                                    :to="'/album/' + album._id"
-                                ></v-btn> -->
-
                                 <v-btn
                                     color="error"
                                     class="mr-4"

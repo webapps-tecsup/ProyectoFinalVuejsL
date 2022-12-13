@@ -1,12 +1,16 @@
 <template>
     <v-row>
         <v-col cols="12">
-            <v-text-field
-                label="Buscar Musica"
-                v-model="params.search"
-                @update:model-value="getItems()"
-            >
-            </v-text-field>
+            <v-card color="#616161">
+                <v-text-field
+                    class="m-1 text-grey"
+                    prepend-icon="mdi-magnify"
+                    label="Buscar Musica"
+                    v-model="params.search"
+                    @update:model-value="getItems()"
+                >
+                </v-text-field>
+            </v-card>
         </v-col>
         <v-col v-for="cancion in items" :key="cancion._id">
             <v-card :color="setColor()" theme="dark" variant="flat">

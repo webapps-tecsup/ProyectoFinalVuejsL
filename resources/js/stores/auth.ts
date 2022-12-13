@@ -26,6 +26,7 @@ export const useAuthStore = defineStore("auth", () => {
             .post("/api/user/login", auth.value)
             .then((x) => {
                 token.value = x.data.token;
+                auth.value = {};
             })
             .catch(() => {});
     }
@@ -33,6 +34,7 @@ export const useAuthStore = defineStore("auth", () => {
         await axios
             .post("/api/user/register", auth.value)
             .then((x) => {
+                auth.value = {};
                 console.log(x.data);
             })
             .catch(() => {});
