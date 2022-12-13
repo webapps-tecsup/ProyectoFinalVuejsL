@@ -15,7 +15,14 @@ export const useCrud = (path: string, p = {}) => {
     onMounted(() => {
         getItems();
     });
-    const colores = ["#ce93d8", "#9c64a6", "#4fc3f7", "#f48fb1", "#90caf9"];
+    const colores = [
+        "#ce93d8",
+        "#4fc3f7",
+        "#4db6ac",
+        "#f48fb1",
+        "#9c64a6",
+        "#4dd0e1",
+    ];
     async function getItems() {
         await axios
             .get(`/${path}`, {
