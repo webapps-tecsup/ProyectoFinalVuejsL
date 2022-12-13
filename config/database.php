@@ -79,13 +79,17 @@ return [
         // ],
 
         'mongodb' => [
+            // 'driver' => 'mongodb',
+            // 'host' => env('DB_HOST', '127.0.0.1'),
+            // 'port' => env('DB_PORT', 27017),
+            // 'database' => env('DB_DATABASE', 'proyectointegrador'),
+            // 'username' => env('DB_USERNAME', ''),
+            // 'password' => env('DB_PASSWORD', '')
             'driver' => 'mongodb',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', 27017),
-            'database' => env('DB_DATABASE', 'proyectointegrador'),
-            'username' => env('DB_USERNAME', ''),
-            'password' => env('DB_PASSWORD', '')
+            'dsn' => env('DB_URI', 'mongodb+srv://admin:8dHl6mjB3bniIKPF@cluster0.336retf.mongodb.net/?retryWrites=true&w=majority'),
+            'database' => 'proyectointegrador',
         ],
+
 
 
         // 'sqlsrv' => [
